@@ -1,0 +1,13 @@
+2026-07-25: hello, i need your help making an android app. read the current proejct directory and also from now on make a txt file called promot and everything i ask you, write the prompt to that file
+2026-07-25: "Build a native Android workout tracking app in Kotlin using Jetpack Compose and Room. The app should be local-only and persist data on the phone. Implement the following MVP features:
+
+a calendar/history screen showing workout days
+a screen to create a new workout
+a screen to add exercises and sets/reps/weight
+a screen to view a selected workout’s details
+a simple progress screen showing weight over time for selected exercises
+local persistence using Room with tables for workouts, exercises, and sets
+use MVVM architecture with ViewModels and repositories
+make the UI simple and clean for a gym-use case
+keep the app offline-first and avoid any backend or login
+Start by scaffolding the project structure, adding the Room database, creating the models and DAO, then implementing the screens and navigation. Prioritize a working MVP over extra features. Keep the code organized and use modern Android best practices."
