@@ -65,10 +65,10 @@ fun CalendarScreen(navController: NavController, viewModel: CalendarViewModel = 
     ) {
         Text("LiftTracker", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
 
+        Button(onClick = { navController.navigate("newWorkout") }, modifier = Modifier.fillMaxWidth()) {
+            Text("Start Workout")
+        }
         Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth()) {
-            Button(onClick = { navController.navigate("newWorkout") }, modifier = Modifier.weight(1f)) {
-                Text("Start Workout")
-            }
             Button(onClick = { navController.navigate("split") }, modifier = Modifier.weight(1f)) {
                 Text("Split")
             }
