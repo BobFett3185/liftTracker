@@ -13,22 +13,15 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -46,7 +39,6 @@ fun WorkoutDetailScreen(
     }
 
     val workoutWithExercises by viewModel.workout.collectAsState()
-    var expandedExerciseId by remember { mutableStateOf<Long?>(null) }
 
     Column(
         modifier = Modifier.fillMaxSize().padding(20.dp),
@@ -90,12 +82,7 @@ fun WorkoutDetailScreen(
             items(workout.exercises.sortedBy { it.exercise.orderIndex }) { exercise ->
                 ExerciseCard(
                     exercise = exercise,
-                    isExpanded = expandedExerciseId == exercise.exercise.id,
-                    onToggle = {
-                        expandedExerciseId = if (expandedExerciseId == exercise.exercise.id) null else exercise.exercise.id
-                    },
-                    onAddSet = viewModel::addSet,
-                    onRename = viewModel::renameExercise
+                    onOpen = { navController.navigate("exercise/${exercise.exercise.id}") }
                 )
             }
         }
@@ -112,100 +99,28 @@ fun WorkoutDetailScreen(
 @Composable
 private fun ExerciseCard(
     exercise: ExerciseWithSets,
-    isExpanded: Boolean,
-    onToggle: () -> Unit,
-    onAddSet: (Long, Int, Double) -> Unit,
-    onRename: (Long, String) -> Unit
+    onOpen: () -> Unit
 ) {
-    var reps by remember { mutableStateOf("") }
-    var weight by remember { mutableStateOf("") }
-    var editedName by remember(exercise.exercise.id, exercise.exercise.name) { mutableStateOf(exercise.exercise.name) }
-    val repsValue = reps.toIntOrNull()
-    val weightValue = weight.toDoubleOrNull()
     val sets = exercise.sets.sortedBy { it.setNumber }
 
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().clickable(onClick = onOpen),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
     ) {
-        Column(
+        Row(
             modifier = Modifier.fillMaxWidth().padding(14.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp)
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth().clickable(onClick = onToggle),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(exercise.exercise.name, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-                    Text(
-                        "${sets.size} sets",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-                Text(if (isExpanded) "Close" else "Open", style = MaterialTheme.typography.labelLarge)
+            Column(modifier = Modifier.weight(1f)) {
+                Text(exercise.exercise.name, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                Text(
+                    "${sets.size} sets",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             }
-
-            if (isExpanded) {
-                Divider()
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
-                    OutlinedTextField(
-                        value = editedName,
-                        onValueChange = { editedName = it },
-                        label = { Text("Exercise name") },
-                        modifier = Modifier.weight(1f),
-                        singleLine = true
-                    )
-                    Button(
-                        onClick = { onRename(exercise.exercise.id, editedName) },
-                        enabled = editedName.isNotBlank() && editedName != exercise.exercise.name
-                    ) {
-                        Text("Rename")
-                    }
-                }
-
-                if (sets.isEmpty()) {
-                    Text("No sets yet.", style = MaterialTheme.typography.bodyMedium)
-                } else {
-                    sets.forEach { set ->
-                        Text("Set ${set.setNumber}: ${set.reps} reps at ${set.weight} lb")
-                    }
-                }
-
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
-                    OutlinedTextField(
-                        value = reps,
-                        onValueChange = { reps = it },
-                        label = { Text("Reps") },
-                        modifier = Modifier.weight(1f),
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                        singleLine = true
-                    )
-                    OutlinedTextField(
-                        value = weight,
-                        onValueChange = { weight = it },
-                        label = { Text("Weight") },
-                        modifier = Modifier.weight(1f),
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                        singleLine = true
-                    )
-                }
-                Button(
-                    onClick = {
-                        if (repsValue != null && weightValue != null) {
-                            onAddSet(exercise.exercise.id, repsValue, weightValue)
-                            reps = ""
-                            weight = ""
-                        }
-                    },
-                    modifier = Modifier.fillMaxWidth(),
-                    enabled = repsValue != null && weightValue != null
-                ) {
-                    Text("Add Set")
-                }
-            }
+            Text(">", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
         }
     }
 }

@@ -44,6 +44,10 @@ interface LiftTrackerDao {
     @Query("SELECT * FROM workouts WHERE id = :workoutId")
     fun getWorkoutByIdFlow(workoutId: Long): Flow<WorkoutWithExercises?>
 
+    @Transaction
+    @Query("SELECT * FROM exercise_entries WHERE id = :exerciseId")
+    fun getExerciseByIdFlow(exerciseId: Long): Flow<ExerciseWithSets?>
+
     @Query("SELECT COUNT(*) FROM exercise_entries WHERE workoutId = :workoutId")
     suspend fun getExerciseCount(workoutId: Long): Int
 

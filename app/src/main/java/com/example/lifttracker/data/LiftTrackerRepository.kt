@@ -7,6 +7,8 @@ class LiftTrackerRepository(private val dao: LiftTrackerDao) {
 
     fun getWorkoutById(workoutId: Long) = dao.getWorkoutByIdFlow(workoutId)
 
+    fun getExerciseById(exerciseId: Long) = dao.getExerciseByIdFlow(exerciseId)
+
     fun getExerciseNames() = dao.getExerciseNames()
 
     fun getProgressForExercise(exerciseName: String) = dao.getProgressForExercise(exerciseName)

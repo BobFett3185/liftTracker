@@ -15,6 +15,7 @@ import androidx.navigation.navArgument
 import androidx.navigation.compose.rememberNavController
 import com.example.lifttracker.ui.screens.AddExerciseSetScreen
 import com.example.lifttracker.ui.screens.CalendarScreen
+import com.example.lifttracker.ui.screens.ExerciseEntryScreen
 import com.example.lifttracker.ui.screens.NewWorkoutScreen
 import com.example.lifttracker.ui.screens.ProgressScreen
 import com.example.lifttracker.ui.screens.SplitScreen
@@ -52,6 +53,13 @@ fun LiftTrackerApp() {
                 ) { backStackEntry ->
                     val workoutId = backStackEntry.arguments?.getLong("workoutId") ?: return@composable
                     AddExerciseSetScreen(navController, workoutId)
+                }
+                composable(
+                    route = "exercise/{exerciseId}",
+                    arguments = listOf(navArgument("exerciseId") { type = NavType.LongType })
+                ) { backStackEntry ->
+                    val exerciseId = backStackEntry.arguments?.getLong("exerciseId") ?: return@composable
+                    ExerciseEntryScreen(navController, exerciseId)
                 }
                 composable("progress") { ProgressScreen(navController) }
             }
