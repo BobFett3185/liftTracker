@@ -16,6 +16,10 @@ class LiftTrackerRepository(private val dao: LiftTrackerDao) {
         return workoutId
     }
 
+    suspend fun deleteWorkout(workoutId: Long) {
+        dao.deleteWorkout(workoutId)
+    }
+
     suspend fun addExercise(workoutId: Long, name: String): Long {
         val orderIndex = dao.getExerciseCount(workoutId)
         val exerciseId = dao.insertExercise(

@@ -17,6 +17,9 @@ interface LiftTrackerDao {
     @Insert
     suspend fun insertSet(set: SetEntryEntity): Long
 
+    @Query("DELETE FROM workouts WHERE id = :workoutId")
+    suspend fun deleteWorkout(workoutId: Long)
+
     @Query("SELECT * FROM workouts ORDER BY date DESC")
     fun getWorkouts(): Flow<List<WorkoutEntity>>
 
