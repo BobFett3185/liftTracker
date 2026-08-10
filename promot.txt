@@ -11,3 +11,5 @@ use MVVM architecture with ViewModels and repositories
 make the UI simple and clean for a gym-use case
 keep the app offline-first and avoid any backend or login
 Start by scaffolding the project structure, adding the Room database, creating the models and DAO, then implementing the screens and navigation. Prioritize a working MVP over extra features. Keep the code organized and use modern Android best practices."
+2026-07-26: ok what does this do as of now, i am testing locally in android studio connected to my phone
+2026-07-26: Explain how the code works right now, all the pieces in depth not just surface level overview
