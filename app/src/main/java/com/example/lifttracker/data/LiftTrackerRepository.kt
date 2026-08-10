@@ -11,7 +11,12 @@ class LiftTrackerRepository(private val dao: LiftTrackerDao) {
 
     fun getExerciseNames() = dao.getExerciseNames()
 
+    fun getSetNumbersForExercise(exerciseName: String) = dao.getSetNumbersForExercise(exerciseName)
+
     fun getProgressForExercise(exerciseName: String) = dao.getProgressForExercise(exerciseName)
+
+    fun getProgressForExerciseSet(exerciseName: String, setNumber: Int) =
+        dao.getProgressForExerciseSet(exerciseName, setNumber)
 
     fun getSplitDays() = dao.getSplitDays()
 

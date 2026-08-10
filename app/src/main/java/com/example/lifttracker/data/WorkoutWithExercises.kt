@@ -26,6 +26,7 @@ data class ExerciseProgressPoint(
     val workoutId: Long,
     val date: String,
     val exerciseName: String,
+    val setNumber: Int,
     val weight: Double,
     val reps: Int
 )

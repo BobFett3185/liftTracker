@@ -26,3 +26,6 @@ Start by scaffolding the project structure, adding the Room database, creating t
 2026-08-09: ok i like this its nice, what are some improvements you see that we could make? maybe we can make the calendar look like the github thing and then you would want to see a screen of colorful blocks as you workout more and more? think about how we can make the UI cleaner and easier to use in a gym env, plan some changes and lemme think about them.
 2026-08-09: wait I thnk the real work needs to be done in the progress part, We should pick an exercise and a set number and see the progress , somehow we need to see the incrrase shown either in sets or weight?
 2026-08-09: option 1 would be cool
+2026-08-10: build failed in ProgressScreen.kt with Type mismatch: inferred type is Int? but Int was expected
+2026-08-10: bro the progress screen is still the same
+2026-08-10: no i mean like the chnages you made did not show up,

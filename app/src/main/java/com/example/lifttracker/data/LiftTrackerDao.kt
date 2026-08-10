@@ -69,8 +69,19 @@ interface LiftTrackerDao {
 
     @Query(
         """
+        SELECT DISTINCT set_entries.setNumber
+        FROM set_entries
+        INNER JOIN exercise_entries ON set_entries.exerciseId = exercise_entries.id
+        WHERE exercise_entries.name = :exerciseName
+        ORDER BY set_entries.setNumber ASC
+        """
+    )
+    fun getSetNumbersForExercise(exerciseName: String): Flow<List<Int>>
+
+    @Query(
+        """
         SELECT workouts.id AS workoutId, workouts.date AS date, exercise_entries.name AS exerciseName,
-               set_entries.weight AS weight, set_entries.reps AS reps
+               set_entries.setNumber AS setNumber, set_entries.weight AS weight, set_entries.reps AS reps
         FROM set_entries
         INNER JOIN exercise_entries ON set_entries.exerciseId = exercise_entries.id
         INNER JOIN workouts ON exercise_entries.workoutId = workouts.id
@@ -79,4 +90,17 @@ interface LiftTrackerDao {
         """
     )
     fun getProgressForExercise(exerciseName: String): Flow<List<ExerciseProgressPoint>>
+
+    @Query(
+        """
+        SELECT workouts.id AS workoutId, workouts.date AS date, exercise_entries.name AS exerciseName,
+               set_entries.setNumber AS setNumber, set_entries.weight AS weight, set_entries.reps AS reps
+        FROM set_entries
+        INNER JOIN exercise_entries ON set_entries.exerciseId = exercise_entries.id
+        INNER JOIN workouts ON exercise_entries.workoutId = workouts.id
+        WHERE exercise_entries.name = :exerciseName AND set_entries.setNumber = :setNumber
+        ORDER BY workouts.date ASC, set_entries.id ASC
+        """
+    )
+    fun getProgressForExerciseSet(exerciseName: String, setNumber: Int): Flow<List<ExerciseProgressPoint>>
 }
