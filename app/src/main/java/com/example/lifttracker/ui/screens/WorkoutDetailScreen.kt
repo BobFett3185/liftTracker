@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
@@ -27,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -45,23 +47,47 @@ fun WorkoutDetailScreen(
     val workoutWithExercises by viewModel.workout.collectAsState()
 
     Column(
-        modifier = Modifier.fillMaxSize().padding(24.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        modifier = Modifier.fillMaxSize().padding(20.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        TextButton(onClick = { navController.popBackStack() }) {
-            Text("Back")
-        }
-
         val workout = workoutWithExercises
         if (workout == null) {
             Text("Loading workout...")
             return@Column
         }
 
-        Text(workout.workout.title, style = MaterialTheme.typography.headlineMedium)
-        Text(workout.workout.date, style = MaterialTheme.typography.bodyLarge)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            TextButton(onClick = { navController.popBackStack() }, modifier = Modifier.width(72.dp)) {
+                Text("Back")
+            }
+            Text(
+                workout.workout.title,
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.weight(1f)
+            )
+            Text(workout.workout.date, style = MaterialTheme.typography.bodyMedium)
+        }
+
         if (workout.workout.notes.isNotBlank()) {
             Text(workout.workout.notes)
+        }
+
+        if (workout.exercises.isEmpty()) {
+            Text("No exercises logged yet.")
+        }
+
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            modifier = Modifier.fillMaxWidth().weight(1f)
+        ) {
+            items(workout.exercises.sortedBy { it.exercise.orderIndex }) { exercise ->
+                ExerciseCard(exercise = exercise, onAddSet = viewModel::addSet)
+            }
         }
 
         Button(
@@ -69,16 +95,6 @@ fun WorkoutDetailScreen(
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Add Exercise")
-        }
-
-        if (workout.exercises.isEmpty()) {
-            Text("No exercises logged yet.")
-        }
-
-        LazyColumn(verticalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
-            items(workout.exercises.sortedBy { it.exercise.orderIndex }) { exercise ->
-                ExerciseCard(exercise = exercise, onAddSet = viewModel::addSet)
-            }
         }
     }
 }
