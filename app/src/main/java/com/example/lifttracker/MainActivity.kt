@@ -17,6 +17,7 @@ import com.example.lifttracker.ui.screens.AddExerciseSetScreen
 import com.example.lifttracker.ui.screens.CalendarScreen
 import com.example.lifttracker.ui.screens.NewWorkoutScreen
 import com.example.lifttracker.ui.screens.ProgressScreen
+import com.example.lifttracker.ui.screens.SplitScreen
 import com.example.lifttracker.ui.screens.WorkoutDetailScreen
 import com.example.lifttracker.ui.theme.LiftTrackerTheme
 
@@ -37,6 +38,7 @@ fun LiftTrackerApp() {
             NavHost(navController = navController, startDestination = "calendar") {
                 composable("calendar") { CalendarScreen(navController) }
                 composable("newWorkout") { NewWorkoutScreen(navController) }
+                composable("split") { SplitScreen(navController) }
                 composable(
                     route = "workout/{workoutId}",
                     arguments = listOf(navArgument("workoutId") { type = NavType.LongType })

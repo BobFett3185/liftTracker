@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class NewWorkoutViewModel(application: Application) : AndroidViewModel(application) {
+class SplitViewModel(application: Application) : AndroidViewModel(application) {
     private val repository = LiftTrackerRepository(LiftTrackerDatabase.getDatabase(application).liftTrackerDao())
 
     private val _splitDays = MutableStateFlow<List<SplitDayWithExercises>>(emptyList())
@@ -24,17 +24,17 @@ class NewWorkoutViewModel(application: Application) : AndroidViewModel(applicati
         }
     }
 
-    fun saveWorkout(title: String, date: String, notes: String = "", onSaved: (Long) -> Unit) {
+    fun addSplitDay(name: String) {
+        if (name.isBlank()) return
         viewModelScope.launch {
-            val workoutId = repository.createWorkout(title, date, notes)
-            onSaved(workoutId)
+            repository.createSplitDay(name.trim())
         }
     }
 
-    fun saveWorkoutFromSplit(splitDay: SplitDayWithExercises, date: String, notes: String = "", onSaved: (Long) -> Unit) {
+    fun addExercise(splitDayId: Long, name: String) {
+        if (name.isBlank()) return
         viewModelScope.launch {
-            val workoutId = repository.createWorkoutFromSplit(splitDay, date, notes)
-            onSaved(workoutId)
+            repository.addSplitExercise(splitDayId, name.trim())
         }
     }
 }

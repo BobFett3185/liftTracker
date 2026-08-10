@@ -69,6 +69,9 @@ fun CalendarScreen(navController: NavController, viewModel: CalendarViewModel = 
             Button(onClick = { navController.navigate("newWorkout") }, modifier = Modifier.weight(1f)) {
                 Text("Start Workout")
             }
+            Button(onClick = { navController.navigate("split") }, modifier = Modifier.weight(1f)) {
+                Text("Split")
+            }
             Button(onClick = { navController.navigate("progress") }, modifier = Modifier.weight(1f)) {
                 Text("Progress")
             }

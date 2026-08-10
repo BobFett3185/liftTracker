@@ -34,4 +34,11 @@ class WorkoutDetailViewModel(application: Application) : AndroidViewModel(applic
             repository.addSet(exerciseId, reps, weight)
         }
     }
+
+    fun renameExercise(exerciseId: Long, name: String) {
+        if (name.isBlank()) return
+        viewModelScope.launch {
+            repository.renameExercise(exerciseId, name.trim())
+        }
+    }
 }

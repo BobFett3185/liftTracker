@@ -11,13 +11,45 @@ class LiftTrackerRepository(private val dao: LiftTrackerDao) {
 
     fun getProgressForExercise(exerciseName: String) = dao.getProgressForExercise(exerciseName)
 
+    fun getSplitDays() = dao.getSplitDays()
+
     suspend fun createWorkout(title: String, date: String, notes: String = ""): Long {
         val workoutId = dao.insertWorkout(WorkoutEntity(date = date, title = title, notes = notes))
         return workoutId
     }
 
+    suspend fun createWorkoutFromSplit(splitDay: SplitDayWithExercises, date: String, notes: String = ""): Long {
+        val workoutId = createWorkout(splitDay.splitDay.name, date, notes)
+        splitDay.exercises.sortedBy { it.orderIndex }.forEach { exercise ->
+            dao.insertExercise(
+                ExerciseEntryEntity(
+                    workoutId = workoutId,
+                    name = exercise.name,
+                    orderIndex = exercise.orderIndex
+                )
+            )
+        }
+        return workoutId
+    }
+
     suspend fun deleteWorkout(workoutId: Long) {
         dao.deleteWorkout(workoutId)
+    }
+
+    suspend fun createSplitDay(name: String): Long {
+        val orderIndex = dao.getSplitDayCount()
+        return dao.insertSplitDay(SplitDayEntity(name = name, orderIndex = orderIndex))
+    }
+
+    suspend fun addSplitExercise(splitDayId: Long, name: String): Long {
+        val orderIndex = dao.getSplitExerciseCount(splitDayId)
+        return dao.insertSplitExercise(
+            SplitExerciseEntity(splitDayId = splitDayId, name = name, orderIndex = orderIndex)
+        )
+    }
+
+    suspend fun renameExercise(exerciseId: Long, name: String) {
+        dao.renameExercise(exerciseId, name)
     }
 
     suspend fun addExercise(workoutId: Long, name: String): Long {

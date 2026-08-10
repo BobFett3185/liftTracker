@@ -17,8 +17,17 @@ interface LiftTrackerDao {
     @Insert
     suspend fun insertSet(set: SetEntryEntity): Long
 
+    @Insert
+    suspend fun insertSplitDay(splitDay: SplitDayEntity): Long
+
+    @Insert
+    suspend fun insertSplitExercise(splitExercise: SplitExerciseEntity): Long
+
     @Query("DELETE FROM workouts WHERE id = :workoutId")
     suspend fun deleteWorkout(workoutId: Long)
+
+    @Query("UPDATE exercise_entries SET name = :name WHERE id = :exerciseId")
+    suspend fun renameExercise(exerciseId: Long, name: String)
 
     @Query("SELECT * FROM workouts ORDER BY date DESC")
     fun getWorkouts(): Flow<List<WorkoutEntity>>
@@ -40,6 +49,16 @@ interface LiftTrackerDao {
 
     @Query("SELECT COUNT(*) FROM set_entries WHERE exerciseId = :exerciseId")
     suspend fun getSetCount(exerciseId: Long): Int
+
+    @Query("SELECT COUNT(*) FROM split_days")
+    suspend fun getSplitDayCount(): Int
+
+    @Query("SELECT COUNT(*) FROM split_exercises WHERE splitDayId = :splitDayId")
+    suspend fun getSplitExerciseCount(splitDayId: Long): Int
+
+    @Transaction
+    @Query("SELECT * FROM split_days ORDER BY orderIndex ASC, id ASC")
+    fun getSplitDays(): Flow<List<SplitDayWithExercises>>
 
     @Query("SELECT DISTINCT name FROM exercise_entries ORDER BY name ASC")
     fun getExerciseNames(): Flow<List<String>>
