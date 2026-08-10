@@ -4,6 +4,8 @@ LiftTracker is a simple offline-first Android app for tracking gym workouts with
 
 The app is built for lifters who want to record sets quickly while they are actually training. The goal is to keep the experience clean, calm, and focused: open the app, choose the workout day, tap the exercise, enter reps and weight, and keep moving.
 
+Feel free to use this app, or grab the code and tell Codex or Claude to recreate for Apple phones
+
 ## What The App Solves
 
 Many gym trackers become too busy, and spreadsheets are awkward on a phone during a workout. LiftTracker keeps the workout flow minimal by separating planning from logging.
